@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "string",
+      "enum": ["attach"],
+      "default": "attach",
+      "description": "Debug request type (always attach for Angelscript)"
+    },
+    "port": {
+      "type": "number",
+      "default": 27099,
+      "description": "Port to connect to Unreal Engine debug server"
+    },
+    "hostname": {
+      "type": "string",
+      "default": "127.0.0.1",
+      "description": "Hostname of Unreal Engine debug server"
+    },
+    "debugAdapterPath": {
+      "type": "string",
+      "description": "Path to the debug adapter JS file. Defaults to ~/.angelscript_debug_adapter/out/debugAdapter.js"
+    },
+    "trace": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable verbose logging"
+    }
+  },
+  "required": ["request"]
+}

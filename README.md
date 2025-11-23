@@ -1,96 +1,120 @@
 # Unreal Angelscript Zed Extension
 
-This extension adds support for Unreal Angelscript (.as files) to the Zed editor, including:
-
-- Syntax highlighting for Unreal Angelscript language constructs
-- Bracket matching
-- Code outline for navigating classes, functions, and other structures
-- Auto-indentation for proper code formatting
-- Support for Unreal Engine-specific macros (UCLASS, UPROPERTY, etc.)
+This extension adds support for Unreal Angelscript (.as files) to the Zed editor.
 
 ## Installation
 
-### Development Installation
+### 1. Install the Language Server
 
-To install this extension locally for development:
+**Prerequisites:** Node.js and Git must be installed.
 
-1. Clone this repository to your local machine
+Run this command to download and build the language server:
+
+```bash
+rm -rf ~/.angelscript_server && git clone --depth 1 https://github.com/Hazelight/vscode-unreal-angelscript.git /tmp/vscode-unreal-angelscript && mv /tmp/vscode-unreal-angelscript/language-server ~/.angelscript_server && rm -rf /tmp/vscode-unreal-angelscript && cd ~/.angelscript_server && sed -i 's/"scripts": {}/"scripts": {"build": "tsc -p .", "watch": "tsc -p . --watch"}/' package.json && sed -i "s/let connection: Connection = createConnection(new IPCMessageReader(process), new IPCMessageWriter(process));/let connection: Connection; if (process.argv.includes('--stdio')) { connection = createConnection(process.stdin, process.stdout); } else { connection = createConnection(new IPCMessageReader(process), new IPCMessageWriter(process)); }/" src/server.ts && npm install && npm run build
+```
+
+### 2. Configure Zed
+
+Add the following to your Zed settings (`~/.config/zed/settings.json`):
+
+```json
+{
+  "lsp": {
+    "unreal_angelscript": {
+      "binary": {
+        "path": "node",
+        "arguments": [
+          "/home/YOUR_USERNAME/.angelscript_server/out/server.js",
+          "--stdio"
+        ]
+      }
+    }
+  }
+}
+```
+
+Replace `YOUR_USERNAME` with your actual username, or use the full path to where you installed the server.
+
+### 3. Install the Extension
+
+#### From Zed Extensions (when published)
+
+1. Open Zed
+2. Go to Extensions
+3. Search for "Unreal Angelscript"
+4. Click Install
+
+#### Development Installation
+
+1. Clone this repository
 2. Open Zed
-3. Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Linux/Windows) to open the command palette
-4. Type "Extensions: Install Dev Extension" and select it
-5. Navigate to the directory containing this extension and select it
-
-The extension will now be available in Zed.
-
-### Dependencies
-
-This extension requires the `tree-sitter-unreal-angelscript` grammar to be available at the path specified in `extension.toml`. Make sure the grammar is installed and accessible.
+3. Go to Extensions > Install Dev Extension
+4. Select the cloned directory
 
 ## Features
 
-### Syntax Highlighting
+- Syntax highlighting for Unreal Angelscript
+- Support for Unreal Engine macros (UCLASS, UPROPERTY, UFUNCTION, etc.)
+- Language server features:
+  - Code completion
+  - Hover information  
+  - Go to definition
+  - Find references
+  - Diagnostics
+  - Code actions
+  - Inlay hints
+  - Semantic highlighting
 
-The extension provides comprehensive syntax highlighting for:
+The language server connects to Unreal Engine to provide engine-specific information. Make sure your Unreal Engine project is open with the Angelscript plugin enabled for full functionality.
 
-- Unreal Engine macros (UCLASS, UPROPERTY, UFUNCTION, etc.)
-- Standard Angelscript keywords (class, struct, enum, if, for, etc.)
-- Types (primitive types, custom types, template types)
-- Functions, methods, and properties
-- Comments, strings, and literals
-- Operators and punctuation
+## Debugging
 
-### Code Outline
+This extension supports debugging AngelScript code in Unreal Engine.
 
-The outline view allows you to navigate your code efficiently, showing:
+### Prerequisites
 
-- Classes and structures
-- Functions and methods
-- Enums and enum values
-- Namespaces
-- Delegates and events
+1. **Install the Debug Adapter:**
 
-### Bracket Matching
+   ```bash
+   git clone https://github.com/dimitrijejankov/unreal-angelscript-debug-adapter.git
+   cd unreal-angelscript-debug-adapter
+   ./scripts/install.sh --local
+   ```
+   
+### How to Debug
 
-The extension supports matching of various bracket pairs:
+1. **Create a debug configuration** in `.zed/debug.json` in your project:
 
-- Curly braces: `{` and `}`
-- Square brackets: `[` and `]`
-- Parentheses: `(` and `)`
-- Quotation marks: `"` and `'`
+   ```json
+   [
+     {
+       "label": "Attach to Unreal Angelscript",
+       "adapter": "angelscript",
+       "request": "attach"
+     }
+   ]
+   ```
 
-### Auto-Indentation
+2. **Start a debug session:**
+   - Set breakpoints in your `.as` files
+   - Open the Debug panel
+   - Select the "Attach to Unreal Angelscript" configuration
+   - Click the "Start Debugging" button
 
-The extension provides proper indentation for:
 
-- Class and struct bodies
-- Function bodies
-- Control flow blocks (if, for, while, etc.)
-- Namespace blocks
+## Troubleshooting
 
-## Testing
+### "Language server path not configured"
 
-The extension includes tests for:
+Make sure you've added the `lsp` configuration to your Zed settings as shown above.
 
-- Syntax highlighting
-- Bracket matching
-- Code outline generation
-- File type detection
+### Language server not starting
 
-To run the tests:
-
-```bash
-cd /path/to/extension
-cargo test
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add or update tests as needed
-5. Submit a pull request
+1. Verify Node.js is installed: `node --version`
+2. Check the server exists: `ls ~/.angelscript_server/out/server.js`
+3. Check Zed logs: Use "zed: open log" command
 
 ## License
 
-This project is licensed under the MIT License.
+MIT

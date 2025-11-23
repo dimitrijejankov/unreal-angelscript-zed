@@ -9,3 +9,11 @@ repository = "https://github.com/dimitrijejankov/zed-unreal-angelscript"
 [grammars.unreal_angelscript]
 repository = "https://github.com/dimitrijejankov/tree-sitter-unreal-angelscript.git"
 rev = "master"
+
+[language_servers.unreal_angelscript]
+name = "Unreal Angelscript Language Server"
+languages = ["Unreal Angelscript"]
+
+[debug_adapters.angelscript]
+name = "AngelScript"
+languages = ["Unreal Angelscript"]

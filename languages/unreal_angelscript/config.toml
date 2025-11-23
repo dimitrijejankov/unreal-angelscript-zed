@@ -1,0 +1,19 @@
+name = "Unreal Angelscript"
+grammar = "unreal_angelscript"
+path_suffixes = ["as"]
+line_comments = ["// "]
+block_comment = ["/*", "*/"]
+autoclose_before = ";:.,=}])>"
+indent_size = 4
+word_characters = ["_"]
+
+[overrides.string]
+completion_query_characters = ["\""]
+
+brackets = [
+  { start = "{", end = "}", close = true, newline = true },
+  { start = "[", end = "]", close = true, newline = true },
+  { start = "(", end = ")", close = true, newline = true },
+  { start = "\"", end = "\"", close = true, newline = false, not_in = ["string"] },
+  { start = "'", end = "'", close = true, newline = false, not_in = ["string"] },
+]

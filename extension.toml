@@ -1,0 +1,11 @@
+id = "unreal-angelscript"
+name = "Unreal Angelscript"
+description = "Unreal Angelscript support."
+version = "0.0.1"
+schema_version = 1
+authors = ["Dimitrije Jankov"]
+repository = "https://github.com/dimitrijejankov/zed-unreal-angelscript"
+
+[grammars.unreal_angelscript]
+repository = "https://github.com/dimitrijejankov/tree-sitter-unreal-angelscript.git"
+rev = "master"

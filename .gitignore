@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Zed
+.zed
+
+# Build artifacts
+grammars
+*.wasm
+target
+
+# Environment files
+.envrc
